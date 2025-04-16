@@ -1,0 +1,5 @@
+package com.example.nsora_learning_app
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()
