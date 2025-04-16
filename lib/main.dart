@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter/services.dart';
 import 'constants/theme.dart';
 import 'screens/splash_screen.dart';
 import 'screens/home_screen.dart';
@@ -11,8 +12,22 @@ import 'screens/learning/shapes_screen.dart';
 import 'screens/learning/animals_screen.dart';
 import 'screens/learning/matching_screen.dart';
 import 'screens/learning/rhymes_screen.dart';
+import 'services/ads_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AdsService().initialize();
+  
+  // Set system UI overlay style
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+  
   runApp(const MyApp());
 }
 
@@ -31,6 +46,23 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: GoogleFonts.poppinsTextTheme(),
         useMaterial3: true,
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.light,
+            systemNavigationBarColor: Colors.white,
+            systemNavigationBarIconBrightness: Brightness.dark,
+          ),
+          backgroundColor: AppTheme.primaryGreen,
+          foregroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.white),
+          titleTextStyle: AppTheme.titleStyle.copyWith(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          elevation: 4,
+          shadowColor: Colors.black26,
+        ),
         cardTheme: CardTheme(
           elevation: AppTheme.cardElevation,
           shape: RoundedRectangleBorder(

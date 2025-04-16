@@ -194,93 +194,97 @@ class MatchingScreen extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: GridView.builder(
-            padding: const EdgeInsets.all(AppTheme.defaultPadding),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: MediaQuery.of(context).size.width > AppTheme.tabletBreakpoint ? 4 : 2,
-              childAspectRatio: 1.0,
-              crossAxisSpacing: AppTheme.defaultPadding,
-              mainAxisSpacing: AppTheme.defaultPadding,
-            ),
-            itemCount: levels.length,
-            itemBuilder: (context, index) {
-              final level = levels[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MatchingGameScreen(
-                        title: level['title'],
-                        type: level['type'],
-                        level: level['level'],
-                      ),
-                    ),
-                  );
-                },
-                child: Card(
-                  elevation: AppTheme.cardElevation,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: level['color'],
-                      borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
-                      boxShadow: [
-                        BoxShadow(
-                          color: level['color'].withOpacity(0.3),
-                          blurRadius: 10,
-                          spreadRadius: 2,
+          child: SingleChildScrollView(
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(AppTheme.defaultPadding),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: MediaQuery.of(context).size.width > AppTheme.tabletBreakpoint ? 4 : 2,
+                childAspectRatio: MediaQuery.of(context).size.width > AppTheme.tabletBreakpoint ? 1.0 : 0.8,
+                crossAxisSpacing: AppTheme.defaultPadding,
+                mainAxisSpacing: AppTheme.defaultPadding,
+              ),
+              itemCount: levels.length,
+              itemBuilder: (context, index) {
+                final level = levels[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MatchingGameScreen(
+                          title: level['title'],
+                          type: level['type'],
+                          level: level['level'],
                         ),
-                      ],
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: AppTheme.cardElevation,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppTheme.defaultPadding),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            level['icon'],
-                            size: AppTheme.largeIconSize,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(height: AppTheme.defaultPadding),
-                          Text(
-                            level['title'],
-                            style: AppTheme.titleStyle.copyWith(
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: AppTheme.defaultPadding / 2),
-                          Text(
-                            level['description'],
-                            style: AppTheme.subtitleStyle.copyWith(
-                              fontSize: 12,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: AppTheme.defaultPadding / 2),
-                          Text(
-                            'Level ${level['level']}',
-                            style: AppTheme.subtitleStyle.copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: level['color'],
+                        borderRadius: BorderRadius.circular(AppTheme.cardBorderRadius),
+                        boxShadow: [
+                          BoxShadow(
+                            color: level['color'].withOpacity(0.3),
+                            blurRadius: 10,
+                            spreadRadius: 2,
                           ),
                         ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(AppTheme.defaultPadding / 2),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              level['icon'],
+                              size: AppTheme.largeIconSize,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(height: AppTheme.defaultPadding),
+                            Text(
+                              level['title'],
+                              style: AppTheme.titleStyle.copyWith(
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: AppTheme.defaultPadding / 2),
+                            Text(
+                              level['description'],
+                              style: AppTheme.subtitleStyle.copyWith(
+                                fontSize: 12,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: AppTheme.defaultPadding / 2),
+                            Text(
+                              'Level ${level['level']}',
+                              style: AppTheme.subtitleStyle.copyWith(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ).animate().scale(
                   duration: AppTheme.quickAnimation,
                   curve: Curves.easeInOut,
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

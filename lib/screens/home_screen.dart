@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../constants/theme.dart';
+import '../widgets/banner_ad_widget.dart';
+import '../services/ads_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _showInterstitialAd();
+  }
+
+  Future<void> _showInterstitialAd() async {
+    await AdsService().showInterstitialAdIfReady();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,61 +74,75 @@ class HomeScreen extends StatelessWidget {
         title: Text(
           'NSORA Learning',
           style: AppTheme.titleStyle.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
+        elevation: 4,
+        backgroundColor: AppTheme.primaryGreen,
+        shadowColor: Colors.black26,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Theme.of(context).colorScheme.primaryContainer,
-              Theme.of(context).colorScheme.background,
-            ],
-          ),
-        ),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isTablet = constraints.maxWidth > AppTheme.tabletBreakpoint;
-            final isDesktop = constraints.maxWidth > AppTheme.desktopBreakpoint;
-
-            final crossAxisCount = isDesktop
-                ? 4
-                : isTablet
-                    ? 3
-                    : 2;
-            final aspectRatio = isDesktop
-                ? 1.0
-                : isTablet
-                    ? 1.1
-                    : 1.2;
-
-            return GridView.builder(
-              padding: EdgeInsets.all(AppTheme.cardPadding),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                childAspectRatio: aspectRatio,
-                crossAxisSpacing: AppTheme.cardPadding,
-                mainAxisSpacing: AppTheme.cardPadding,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context).colorScheme.primaryContainer,
+                    Theme.of(context).colorScheme.background,
+                  ],
+                ),
               ),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                return CategoryCard(
-                  title: category['title'] as String,
-                  icon: category['icon'] as IconData,
-                  color: category['color'] as Color,
-                  route: category['route'] as String,
-                  index: index,
-                );
-              },
-            );
-          },
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isTablet = constraints.maxWidth > AppTheme.tabletBreakpoint;
+                  final isDesktop = constraints.maxWidth > AppTheme.desktopBreakpoint;
+
+                  final crossAxisCount = isDesktop
+                      ? 4
+                      : isTablet
+                          ? 3
+                          : 2;
+                  final aspectRatio = isDesktop
+                      ? 1.0
+                      : isTablet
+                          ? 1.1
+                          : 1.2;
+
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.all(AppTheme.cardPadding),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      childAspectRatio: aspectRatio,
+                      crossAxisSpacing: AppTheme.cardPadding,
+                      mainAxisSpacing: AppTheme.cardPadding,
+                    ),
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      final category = categories[index];
+                      return CategoryCard(
+                        title: category['title'] as String,
+                        icon: category['icon'] as IconData,
+                        color: category['color'] as Color,
+                        route: category['route'] as String,
+                        index: index,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            const BannerAdWidget(
+              margin: EdgeInsets.symmetric(vertical: 8),
+            ),
+          ],
         ),
       ),
     );
